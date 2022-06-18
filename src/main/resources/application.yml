@@ -1,0 +1,38 @@
+# 应用服务 WEB 访问端口
+server:
+  port: 8070
+
+# 应用名称
+spring:
+  application:
+    name: fivechess
+  # mysql 配置
+  datasource:
+    url: jdbc:mysql://localhost:3306/fivechess?characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  # redis 配置
+  redis:
+    host: localhost
+    port: 6379
+    database: 2
+    password:
+    timeout: 1s
+    lettuce:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 16
+        # 连接池中的最大空闲连接
+        max-idle: 32
+        # 连接池的最大数据库连接数
+        max-active: 32
+        # #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: 800ms
+
+# MyBatis配置
+mybatis:
+  # 搜索指定包别名
+  typeAliasesPackage: com.mobile.**.domain
+  # 配置mapper的扫描，找到所有的mapper.xml映射文件
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
