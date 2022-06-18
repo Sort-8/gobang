@@ -7,7 +7,7 @@
 #jar包名称
 APP_NAME=fivechess-1.0.jar
 #完整的jar路径
-APP_PATH=$APP_NAME
+APP_PATH=target/$APP_NAME
 #运行日志
 LOG_FILE=fivechess.log
 #JVM运行参数
