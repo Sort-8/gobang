@@ -4,6 +4,9 @@ pipeline {
           label 'master'
        }
     }
+    tools {
+        maven 'maven'
+    }
     options { timeout(time: 4, unit: 'MINUTES') }
     stages {
         stage('Pull') {
