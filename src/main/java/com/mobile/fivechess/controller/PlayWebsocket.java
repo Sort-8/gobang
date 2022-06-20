@@ -34,7 +34,7 @@ public class PlayWebsocket {
     private static ConcurrentHashMap<String, Session> sessionMap = new ConcurrentHashMap<>();
 
     @OnMessage
-    public void onMessage(String message, Session session) throws IOException {
+    public void onMessage(String message, Session session) {
         Message m = null;
         try {
             m = JSONObject.parseObject(message, Message.class);
@@ -54,13 +54,16 @@ public class PlayWebsocket {
          * 如果接收人上线则发送消息给接收人
          * 如果接收人还没有上线则告诉发送人发送失败信息
          */
-        Session s = sessionMap.get(m.getTo());
-        if (s != null) {
-            s.getBasicRemote().sendText(m.getInfo());
-        } else {
+        try {
+            Session s = sessionMap.get(m.getTo());
+            if (s == null) {
+                throw new Exception();
+            }
+            s.getBasicRemote().sendObject(m);
+        } catch (Exception e) {
+            log.error("发送错误", e);
             sendMessage(session, new AjaxResult(HttpStatus.PARAMS_LACK_ERROR, "缺少发送人或接收人"));
         }
-
     }
 
     @OnOpen
