@@ -204,10 +204,10 @@ public class MatchWebsocket {
                 if (u1 != null && u2 != null) {
                     boolean isFirst = r.nextBoolean();
                     sendMessage(sessionMap.get(u1.getUserId()),
-                            AjaxResult.success("匹配成功", new MatchSuccess(u2.getUserId(), isFirst)));
+                            new AjaxResult(HttpStatus.MATCH_SUCCESS, "匹配成功", new MatchSuccess(u2.getUserId(), isFirst)));
 
                     sendMessage(sessionMap.get(u2.getUserId()),
-                            AjaxResult.success("匹配成功", new MatchSuccess(u1.getUserId(), !isFirst)));
+                            new AjaxResult(HttpStatus.MATCH_SUCCESS, "匹配成功", new MatchSuccess(u1.getUserId(), !isFirst)));
                     removeUserByPool(u1);
                     removeUserByPool(u2);
                     sc.remove(u1);

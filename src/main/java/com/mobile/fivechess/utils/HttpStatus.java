@@ -7,6 +7,12 @@ package com.mobile.fivechess.utils;
  */
 public class HttpStatus
 {
+
+    /**
+     * 匹配成功
+     */
+    public static final int MATCH_SUCCESS = 0;
+
     /**
      * 操作成功
      */
