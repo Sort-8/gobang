@@ -1,7 +1,5 @@
 package com.mobile.fivechess.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.mobile.fivechess.domain.MatchSuccess;
 import com.mobile.fivechess.domain.User;
 import com.mobile.fivechess.service.IUserService;
 import com.mobile.fivechess.utils.EloUtil;
@@ -203,11 +201,13 @@ public class MatchWebsocket {
                 // 找到最早进行匹配的两个玩家，即匹配成功后的操作
                 if (u1 != null && u2 != null) {
                     boolean isFirst = r.nextBoolean();
+                    u1.setFirst(isFirst);
+                    u2.setFirst(!isFirst);
                     sendMessage(sessionMap.get(u1.getUserId()),
-                            new AjaxResult(HttpStatus.MATCH_SUCCESS, "匹配成功", new MatchSuccess(u2.getUserId(), isFirst)));
+                            new AjaxResult(HttpStatus.MATCH_SUCCESS, "匹配成功", u2));
 
                     sendMessage(sessionMap.get(u2.getUserId()),
-                            new AjaxResult(HttpStatus.MATCH_SUCCESS, "匹配成功", new MatchSuccess(u1.getUserId(), !isFirst)));
+                            new AjaxResult(HttpStatus.MATCH_SUCCESS, "匹配成功", u1));
                     removeUserByPool(u1);
                     removeUserByPool(u2);
                     sc.remove(u1);

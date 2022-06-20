@@ -59,6 +59,11 @@ public class User implements Comparable<User> {
      */
     private double rivalRating;
 
+    /**
+     * 是否先手
+     */
+    private boolean isFirst;
+
     public String getUserId() {
         return userId;
     }
@@ -131,6 +136,14 @@ public class User implements Comparable<User> {
         this.rivalRating = rivalRating;
     }
 
+    public boolean isFirst() {
+        return isFirst;
+    }
+
+    public void setFirst(boolean first) {
+        isFirst = first;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -143,30 +156,13 @@ public class User implements Comparable<User> {
                 ", matchTime=" + matchTime +
                 ", playRes=" + playRes +
                 ", rivalRating=" + rivalRating +
+                ", isFirst=" + isFirst +
                 '}';
     }
 
     @Override
     public int compareTo(User u) {
         return (int) (this.getMatchTime() - u.getMatchTime());
-    }
-
-    public static void main(String[] args) {
-        String m = "{\n" +
-                "    \"userId\":\"e4787d9440c1676f\",\n" +
-                "    \"rating\":1500,\n" +
-                "    \"integral\":0\n" +
-                "}";
-        try {
-            Message msg = JSONObject.parseObject(m, Message.class);
-            if (msg.getFrom() == null || msg.getTo() == null) {
-                throw new NullPointerException();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
     }
 
 }
