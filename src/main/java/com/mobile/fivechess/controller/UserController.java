@@ -94,7 +94,9 @@ public class UserController extends BaseController {
             u.setIntegral(u.getIntegral() + 1);
             u.setRating(EloUtil.calculate(u.getRating(), rivalRating, EloUtil.Win));
         } else if (playRes == -1) {
-            u.setIntegral(u.getIntegral() - 1);
+            if (u.getIntegral() - 1 > 0){
+                u.setIntegral(u.getIntegral() - 1);
+            }
             u.setRating(EloUtil.calculate(u.getRating(), rivalRating, EloUtil.Loss));
         } else if (playRes == 0) {
             u.setRating(EloUtil.calculate(u.getRating(), rivalRating, EloUtil.Draw));
