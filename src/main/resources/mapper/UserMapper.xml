@@ -9,19 +9,24 @@
         <result property="nickname" column="nickname"/>
         <result property="rating" column="rating"/>
         <result property="integral" column="integral"/>
+        <result property="gameNumber" column="game_number"/>
+        <result property="winNumber" column="win_number"/>
         <result property="rankName" column="rank_name"/>
     </resultMap>
 
     <sql id="selectUserVo">
-        select user_id, nickname, rating, integral, rank_name from user
+        select user_id, nickname, rank, rating, integral, game_number, win_number, rank_name from user
     </sql>
 
     <select id="selectUserList" parameterType="User" resultMap="UserResult">
         <include refid="selectUserVo"/>
         <where>
             <if test="nickname != null and nickname != ''">and nickname like concat('%', #{nickname}, '%')</if>
+            <if test="rank !=  and rank != 0"> and rank = #{rank}</if>
             <if test="rating != null and rating != 0.0">and rating = #{rating}</if>
-            <if test="integral != null and integral != 0.0">and integral = #{integral}</if>
+            <if test="integral != null and integral != 0">and integral = #{integral}</if>
+            <if test="gameNumber != null and gameNumber != 0">and game_number = #{gameNumber}</if>
+            <if test="winNumber != null and winNumber != 0.0">and win_number = #{winNumber}</if>
             <if test="rankName != null and rankName != ''">and rank_name like concat('%', #{rankName}, '%'),</if>
         </where>
         order by integral desc
@@ -37,16 +42,22 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">user_id,</if>
             <if test="nickname != null">nickname,</if>
+            <if test="rank != null">rank,</if>
             <if test="rating != null">rating,</if>
             <if test="integral != null">integral,</if>
             <if test="rankName != null">rank_name,</if>
+            <if test="gameNumber != null">game_number,</if>
+            <if test="winNumber != null">win_number,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">#{userId},</if>
             <if test="nickname != null">#{nickname},</if>
+            <if test="rank != null">#{rank},</if>
             <if test="rating != null">#{rating},</if>
             <if test="integral != null">#{integral},</if>
             <if test="rankName != null">#{rankName},</if>
+            <if test="gameNumber != null">#{gameNumber},</if>
+            <if test="winNumber != null">#{winNumber},</if>
         </trim>
     </insert>
 
@@ -54,9 +65,12 @@
         update user
         <trim prefix="SET" suffixOverrides=",">
             <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="rank != null">rank = #{rank},</if>
             <if test="rating != null">rating = #{rating},</if>
             <if test="integral != null">integral = #{integral},</if>
             <if test="rankName != null">rank_name = #{rankName},</if>
+            <if test="gameNumber != null">game_number = #{gameNumber},</if>
+            <if test="winNumber != null">win_number = #{winNumber},</if>
         </trim>
         where user_id = #{userId}
     </update>

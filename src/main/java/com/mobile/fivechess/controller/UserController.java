@@ -77,34 +77,70 @@ public class UserController extends BaseController {
     /**
      * 比赛结算积分、等级分
      *
-     * @param user 用户
+     * @param u 用户
      * @return 是否结算成功
      */
     @PutMapping("/playRes")
     @ResponseBody
-    public AjaxResult playRes(@RequestBody User user) {
-        User u = userService.selectUserById(user.getUserId());
-        int playRes = user.getPlayRes();
-        double rivalRating = user.getRivalRating();
-        if (u == null) {
+    public AjaxResult playRes(@RequestBody User u) {
+        User user = userService.selectUserById(u.getUserId());
+        User rivalUser = userService.selectUserById(u.getRivalUserId());
+        if (user == null) {
             return AjaxResult.error("没有该用户");
         }
+        if (rivalUser == null) {
+            return AjaxResult.error("没有对手");
+        }
+        // 比赛结果
+        int playRes = u.getPlayRes();
+        // 用户等级分
+        double rating = user.getRating();
+        // 对手等级分
+        double rivalRating = rivalUser.getRating();
+
         // 比赛结果依次是胜、平、负
         if (playRes == 1) {
-            u.setIntegral(u.getIntegral() + 1);
-            u.setRating(EloUtil.calculate(u.getRating(), rivalRating, EloUtil.Win));
-        } else if (playRes == -1) {
-            if (u.getIntegral() - 1 > 0){
-                u.setIntegral(u.getIntegral() - 1);
+            user.setIntegral(user.getIntegral() + 1);
+            user.setRating(EloUtil.calculate(rating, rivalRating, EloUtil.Win));
+            user.setGameNumber(user.getGameNumber() + 1);
+            user.setWinNumber(user.getWinNumber() + 1);
+
+            if (rivalUser.getIntegral() > 0) {
+                rivalUser.setIntegral(rivalUser.getIntegral() - 1);
             }
-            u.setRating(EloUtil.calculate(u.getRating(), rivalRating, EloUtil.Loss));
+            if (rivalUser.getRating() > 0) {
+                rivalUser.setRating(EloUtil.calculate(rivalRating, rating, EloUtil.Loss));
+            }
+            rivalUser.setGameNumber(rivalUser.getGameNumber() + 1);
+
         } else if (playRes == 0) {
-            u.setRating(EloUtil.calculate(u.getRating(), rivalRating, EloUtil.Draw));
+            user.setRating(EloUtil.calculate(rating, rivalRating, EloUtil.Draw));
+            user.setGameNumber(user.getGameNumber() + 1);
+            rivalUser.setRating(EloUtil.calculate(rating, rivalRating, EloUtil.Draw));
+            rivalUser.setGameNumber(rivalUser.getGameNumber() + 1);
+
+        } else if (playRes == -1) {
+            rivalUser.setIntegral(rivalUser.getIntegral() + 1);
+            rivalUser.setRating(EloUtil.calculate(rivalRating, rating, EloUtil.Win));
+            rivalUser.setGameNumber(rivalUser.getGameNumber() + 1);
+            rivalUser.setWinNumber(rivalUser.getWinNumber() + 1);
+
+            if (user.getIntegral() > 0) {
+                user.setIntegral(user.getIntegral() - 1);
+            }
+            if (user.getRating() > 0) {
+                user.setRating(EloUtil.calculate(rivalRating, rating, EloUtil.Loss));
+            }
+            user.setGameNumber(user.getGameNumber() + 1);
+
         } else {
             return AjaxResult.error("没有比赛结果");
         }
-        EloUtil.match(u);
-        return toAjax(userService.updateUser(u));
+
+        EloUtil.match(user);
+        EloUtil.match(rivalUser);
+        userService.updateUser(rivalUser);
+        return toAjax(userService.updateUser(user));
     }
 
     /**

@@ -5,7 +5,6 @@ import java.util.List;
 import com.mobile.fivechess.service.IUserService;
 import com.mobile.fivechess.utils.EloUtil;
 import com.mobile.fivechess.utils.RandomName;
-import com.mobile.fivechess.utils.RedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.mobile.fivechess.mapper.UserMapper;
@@ -18,8 +17,7 @@ import com.mobile.fivechess.domain.User;
  * @date 2022-06-15
  */
 @Service
-public class UserServiceImpl implements IUserService
-{
+public class UserServiceImpl implements IUserService {
     @Autowired
     private UserMapper userMapper;
 
@@ -30,15 +28,17 @@ public class UserServiceImpl implements IUserService
      * @return 用户
      */
     @Override
-    public User login(String userId)
-    {
+    public User login(String userId) {
         User user = userMapper.selectUserById(userId);
-        if (user == null){
+        if (user == null) {
             user = new User();
             user.setUserId(userId);
             user.setNickname(RandomName.randomName());
+            user.setRank(1);
             user.setRating(1500);
             user.setIntegral(0);
+            user.setGameNumber(0);
+            user.setWinNumber(0);
             EloUtil.match(user);
             userMapper.insertUser(user);
         }
@@ -52,8 +52,7 @@ public class UserServiceImpl implements IUserService
      * @return 用户
      */
     @Override
-    public User selectUserById(String userId)
-    {
+    public User selectUserById(String userId) {
         return userMapper.selectUserById(userId);
     }
 
@@ -64,8 +63,7 @@ public class UserServiceImpl implements IUserService
      * @return 用户
      */
     @Override
-    public List<User> selectUserList(User user)
-    {
+    public List<User> selectUserList(User user) {
         return userMapper.selectUserList(user);
     }
 
@@ -76,8 +74,7 @@ public class UserServiceImpl implements IUserService
      * @return 结果
      */
     @Override
-    public int updateUser(User user)
-    {
+    public int updateUser(User user) {
         return userMapper.updateUser(user);
     }
 

@@ -32,6 +32,16 @@ public class User implements Comparable<User> {
     private int integral;
 
     /**
+     * 对战局数
+     */
+    private int gameNumber;
+
+    /**
+     * 胜利局数
+     */
+    private int winNumber;
+
+    /**
      * 段位
      */
     private int rank;
@@ -55,9 +65,9 @@ public class User implements Comparable<User> {
     private int playRes;
 
     /**
-     * 对手等级分
+     * 对手id
      */
-    private double rivalRating;
+    private String rivalUserId;
 
     /**
      * 是否先手
@@ -96,6 +106,22 @@ public class User implements Comparable<User> {
         this.integral = integral;
     }
 
+    public int getGameNumber() {
+        return gameNumber;
+    }
+
+    public void setGameNumber(int gameNumber) {
+        this.gameNumber = gameNumber;
+    }
+
+    public int getWinNumber() {
+        return winNumber;
+    }
+
+    public void setWinNumber(int winNumber) {
+        this.winNumber = winNumber;
+    }
+
     public int getRank() {
         return rank;
     }
@@ -128,12 +154,12 @@ public class User implements Comparable<User> {
         this.playRes = playRes;
     }
 
-    public double getRivalRating() {
-        return rivalRating;
+    public String getRivalUserId() {
+        return rivalUserId;
     }
 
-    public void setRivalRating(double rivalRating) {
-        this.rivalRating = rivalRating;
+    public void setRivalUserId(String rivalUserId) {
+        this.rivalUserId = rivalUserId;
     }
 
     public boolean isFirst() {
@@ -151,11 +177,13 @@ public class User implements Comparable<User> {
                 ", nickname='" + nickname + '\'' +
                 ", rating=" + rating +
                 ", integral=" + integral +
+                ", gameNumber=" + gameNumber +
+                ", winNumber=" + winNumber +
                 ", rank=" + rank +
                 ", rankName='" + rankName + '\'' +
                 ", matchTime=" + matchTime +
                 ", playRes=" + playRes +
-                ", rivalRating=" + rivalRating +
+                ", rivalUserId='" + rivalUserId + '\'' +
                 ", isFirst=" + isFirst +
                 '}';
     }
