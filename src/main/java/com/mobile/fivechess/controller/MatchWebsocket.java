@@ -73,8 +73,6 @@ public class MatchWebsocket {
         }
         // 设置匹配时间
         user.setMatchTime(System.currentTimeMillis());
-        // 设置用户等级rank
-        EloUtil.match(user);
         // 加入会话池
         sessionMap.put(user.getUserId(), session);
 
