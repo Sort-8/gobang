@@ -126,8 +126,10 @@ public class MatchWebsocket {
             // 超时了就将该玩家从匹配池和会话池剔除
             if ((System.currentTimeMillis() - user.getMatchTime()) / 1000 > TIMEOUT) {
                 Session session = sessionMap.get(user.getUserId());
-                sendMessage(session, new AjaxResult(HttpStatus.TIMEOUT, "匹配超时"));
-                removeUserByPool(user);
+                if (session != null) {
+                    sendMessage(session, new AjaxResult(HttpStatus.TIMEOUT, "匹配超时"));
+                    removeUserByPool(user);
+                }
                 continue;
             }
 
@@ -264,6 +266,7 @@ public class MatchWebsocket {
             log.info("用户id：" + list.get(0) + "  关闭连接");
             log.info("会话池：去除用户id：" + list.get(0));
             sessionMap.remove(list.get(0));
+            matchPool.remove(list.get(0));
         } else {
             sendMessage(session, new AjaxResult(HttpStatus.PARAMS_LACK_ERROR, "缺少参数"));
         }
