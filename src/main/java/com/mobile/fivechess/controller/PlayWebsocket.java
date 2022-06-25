@@ -44,9 +44,11 @@ public class PlayWebsocket {
         } catch (JSONException e) {
             log.error("JSON对象转换错误", e);
             sendMessage(session, new AjaxResult(HttpStatus.JSON_ERROR, "JSON对象转换错误"));
+            return;
         } catch (NullPointerException e) {
             log.error("缺少发送人或接收人", e);
             sendMessage(session, new AjaxResult(HttpStatus.PARAMS_LACK_ERROR, "缺少发送人或接收人"));
+            return;
         }
 
         /**
