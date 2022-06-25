@@ -85,6 +85,10 @@ public class PlayWebsocket {
         if (list != null && list.size() > 0) {
             log.info("用户id：" + list.get(0) + "  关闭连接");
             log.info("会话池：去除用户id：" + list.get(0));
+            Session s = sessionMap.get(list.get(0));
+            if (s != null) {
+                sendMessage(session, new AjaxResult(HttpStatus.RIVAL_GIVE_UP, "对手认输"));
+            }
             sessionMap.remove(list.get(0));
         } else {
             sendMessage(session, new AjaxResult(HttpStatus.PARAMS_LACK_ERROR, "缺少参数"));

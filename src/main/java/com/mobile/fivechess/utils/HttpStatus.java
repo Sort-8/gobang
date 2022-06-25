@@ -42,4 +42,9 @@ public class HttpStatus
      * 用户不存在
      */
     public static final int NOT_USER_ERROR = 10003;
+
+    /**
+     * 对手认输
+     */
+    public static final int RIVAL_GIVE_UP = 10004;
 }
