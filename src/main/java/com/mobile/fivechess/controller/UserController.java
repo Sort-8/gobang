@@ -115,7 +115,7 @@ public class UserController extends BaseController {
                 user.setIntegral(user.getIntegral() - 1);
             }
             if (user.getRating() > 0) {
-                user.setRating(EloUtil.calculate(rivalRating, rating, EloUtil.Loss));
+                user.setRating(EloUtil.calculate(rating, rivalRating, EloUtil.Loss));
             }
             user.setGameNumber(user.getGameNumber() + 1);
 

@@ -33,11 +33,6 @@ public class PlayWebsocket {
      */
     private static ConcurrentHashMap<String, Session> sessionMap = new ConcurrentHashMap<>();
 
-    /**
-     * 对战池
-     */
-    private static ConcurrentHashMap<String, String> playMap = new ConcurrentHashMap<>();
-
     @OnMessage
     public void onMessage(String message, Session session) throws IOException {
         Message m = null;
@@ -64,16 +59,8 @@ public class PlayWebsocket {
         Session s = sessionMap.get(m.getTo());
         if (s != null) {
             s.getBasicRemote().sendText(JSONObject.toJSONString(m));
-            playMap.put(m.getFrom(), m.getTo());
         } else {
-            String rivalUserId = playMap.get(m.getTo());
-            // 对手掉线或认输
-            if (rivalUserId != null) {
-                sendMessage(session, new AjaxResult(HttpStatus.RIVAL_GIVE_UP, "对手掉线或认输"));
-                sessionMap.remove(m.getFrom());
-            }else{
-                sendMessage(session, new AjaxResult(HttpStatus.PARAMS_LACK_ERROR, "缺少发送人或接收人"));
-            }
+            sendMessage(session, new AjaxResult(HttpStatus.PARAMS_LACK_ERROR, "缺少发送人或接收人"));
         }
     }
 
