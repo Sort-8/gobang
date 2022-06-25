@@ -105,25 +105,11 @@ public class UserController extends BaseController {
             user.setGameNumber(user.getGameNumber() + 1);
             user.setWinNumber(user.getWinNumber() + 1);
 
-            if (rivalUser.getIntegral() > 0) {
-                rivalUser.setIntegral(rivalUser.getIntegral() - 1);
-            }
-            if (rivalUser.getRating() > 0) {
-                rivalUser.setRating(EloUtil.calculate(rivalRating, rating, EloUtil.Loss));
-            }
-            rivalUser.setGameNumber(rivalUser.getGameNumber() + 1);
-
         } else if (playRes == 0) {
             user.setRating(EloUtil.calculate(rating, rivalRating, EloUtil.Draw));
             user.setGameNumber(user.getGameNumber() + 1);
-            rivalUser.setRating(EloUtil.calculate(rating, rivalRating, EloUtil.Draw));
-            rivalUser.setGameNumber(rivalUser.getGameNumber() + 1);
 
         } else if (playRes == -1) {
-            rivalUser.setIntegral(rivalUser.getIntegral() + 1);
-            rivalUser.setRating(EloUtil.calculate(rivalRating, rating, EloUtil.Win));
-            rivalUser.setGameNumber(rivalUser.getGameNumber() + 1);
-            rivalUser.setWinNumber(rivalUser.getWinNumber() + 1);
 
             if (user.getIntegral() > 0) {
                 user.setIntegral(user.getIntegral() - 1);
@@ -138,8 +124,6 @@ public class UserController extends BaseController {
         }
 
         EloUtil.match(user);
-        EloUtil.match(rivalUser);
-        userService.updateUser(rivalUser);
         return toAjax(userService.updateUser(user));
     }
 
