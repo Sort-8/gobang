@@ -56,7 +56,7 @@ public class PlayWebsocket {
          */
         Session s = sessionMap.get(m.getTo());
         if (s != null) {
-            s.getBasicRemote().sendText(m.getInfo());
+            s.getBasicRemote().sendText(JSONObject.toJSONString(m));
         } else {
             sendMessage(session, new AjaxResult(HttpStatus.PARAMS_LACK_ERROR, "缺少发送人或接收人"));
         }
